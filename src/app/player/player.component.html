@@ -1,0 +1,6 @@
+<div class="cards" *ngFor="let card of this.cards">
+    <img  [src]="card.image"/>
+</div>
+<p>{{ this.cardSum  }}</p>
+<button >Stay</button>
+<button (click)="onPull.emit()" >Pull</button>
