@@ -1,3 +1,4 @@
-<app-dealer (hasDealtChanged)="this.hasDealtChanged($event)"></app-dealer>
+<app-dealer [hasDealt]="hasDealt" (hasDealtChanged)="this.hasDealtChanged($event)"></app-dealer>
 <h1>{{ message }}</h1>
-<app-player *ngIf="this.playerCards" [cards]="this.playerCards" (scoreChanged)="onScoreChanged($event)" (onPull)="pullCards(1)"></app-player>
+<app-player #player *ngIf="this.playerCards" [cards]="this.playerCards" (scoreChanged)="onScoreChanged($event)" (onPull)="pullCards(1)"></app-player>
+<button *ngIf="this.player?.buttonsDisabled" (click)="resetGame()">Restart</button>

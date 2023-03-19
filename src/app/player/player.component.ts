@@ -2,15 +2,17 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ACE, Card } from '../model/Card';
 
 @Component({
-  selector: 'app-player',
-  templateUrl: './player.component.html',
-  styleUrls: ['./player.component.css']
+    selector: 'app-player',
+    templateUrl: './player.component.html',
+    styleUrls: ['./player.component.css']
 })
 export class PlayerComponent {
     @Input() cards?: Card[];
 
     @Output() onPull: EventEmitter<number> = new EventEmitter();
     @Output() scoreChanged: EventEmitter<number> = new EventEmitter();
+
+    @Input() buttonsDisabled: boolean = false;
 
     get cardSum(): number {
         if (!this.cards) return 0;
@@ -22,7 +24,7 @@ export class PlayerComponent {
             if (isNaN(value)) {
 
                 if (card.value == ACE) {
-                    sum += (sum + 10 > 21) ?  1 : 10;
+                    sum += (sum + 11 > 21) ? 1 : 11;
                 } else {
                     sum += 10;
                 }
@@ -30,8 +32,14 @@ export class PlayerComponent {
                 sum += value;
             }
         }
-
+        if (!this.buttonsDisabled) {
+            this.buttonsDisabled = sum >= 21;
+        }
         this.scoreChanged.emit(sum);
         return sum;
+    }
+
+    stay() {
+        this.buttonsDisabled = true;
     }
 }

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { DeckOfCardsService } from '../deck-of-cards.service';
 import { Card } from '../model/Card';
 import { Deck } from '../model/Deck';
+import { PlayerComponent } from '../player/player.component';
 
 @Component({
     selector: 'app-game',
@@ -12,8 +13,15 @@ export class GameComponent {
     deck?: Deck;
     playerCards?: Card[];
     playerScore = 0;
+    hasDealt = false;
     message = "";
+    @ViewChild('player') player?: PlayerComponent;
+
     constructor(private _deckService: DeckOfCardsService) {
+        this.getNewDeck();
+    }
+
+    getNewDeck() {
         this._deckService.getNewDeck().subscribe(response => {
             if (response.deck_id) {
                 this.deck = response;
@@ -34,6 +42,7 @@ export class GameComponent {
         this.playerScore = newScore;
         if (this.playerScore > 21) {
             this.message = "You lost noob! Get shit on!";
+            this.hasDealt = false;
         }
     }
 
@@ -50,5 +59,15 @@ export class GameComponent {
             }
         });
 
+    }
+
+    resetGame() {
+        this.getNewDeck();
+        this.playerCards = [];
+        this.playerScore = 0;
+        this.message = "";
+        this.hasDealt = false;
+        if (!this.player) return;
+        this.player.buttonsDisabled = false;
     }
 }
